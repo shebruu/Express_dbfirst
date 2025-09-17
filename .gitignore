@@ -1,0 +1,38 @@
+
+
+.env
+.env.*
+errors_logs.txt
+
+# Dépendances
+node_modules/
+
+# Fichiers système/OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+*.log
+*.tmp
+*.swp
+
+
+dist/
+build/
+coverage/
+
+
+12-9.txt
+utilities.txt
+notes.txt
+
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
