@@ -1,19 +1,19 @@
-function getAuthorModel(req) {
-  return req.app.locals.models.author;
-}
+const authorsService = require("../services/authors.services");
+const apiCallResult = require("../responses/apiCallResult.response");
 
-exports.getAllAuthors = async (req, res, next) => {
+
+exports.findAll = async (req, res, next) => {
   try {
-    const authors = await getAuthorModel(req).findAll();
+    const authors = await authorsService.findAll();
     res.json(authors);
   } catch (err) {
     next(err);
   }
 };
 
-exports.getAuthorById = async (req, res, next) => {
+exports.findOne = async (req, res, next) => {
   try {
-    const foundAuthor = await getAuthorModel(req).findByPk(req.params.id);
+    const foundAuthor = await authorsService.findOneById(req.params.id);
     if (!foundAuthor) return res.status(404).json({ error: 'Author not found' });
     res.json(foundAuthor);
   } catch (err) {
@@ -21,33 +21,35 @@ exports.getAuthorById = async (req, res, next) => {
   }
 };
 
-exports.createAuthor = async (req, res, next) => {
+exports.create = async (req, res, next) => {
   try {
-    const newAuthor = await getAuthorModel(req).create(req.body);
+    const newAuthor = await authorsService.create(req.body);
     res.status(201).json(newAuthor);
   } catch (err) {
     next(err);
   }
 };
 
-exports.updateAuthor = async (req, res, next) => {
+exports.update = async (req, res, next) => {
   try {
-    const author = getAuthorModel(req);
-    const [updated] = await author.update(req.body, { where: { id: req.params.id } });
+    const updated = await authorsService.update(req.params.id, req.body);
     if (!updated) return res.status(404).json({ error: 'Author not found' });
-    const updatedAuthor = await author.findByPk(req.params.id);
-    res.json(updatedAuthor);
+    res.json(updated);
   } catch (err) {
     next(err);
   }
 };
 
-exports.deleteAuthor = async (req, res, next) => {
-  try {
-    const deleted = await getAuthorModel(req).destroy({ where: { id: req.params.id } });
-    if (!deleted) return res.status(404).json({ error: 'Author not found' });
-    res.json({ message: 'Author deleted' });
-  } catch (err) {
-    next(err);
-  }
+exports.remove = async (req, res) => {
+
+  const deleted = await authorsService.remove(req.params.id);
+  return apiCallResult(res, result);
+};
+
+module.exports = {
+  findAll,
+  findOne,
+  update,
+  remove,
+  create,
 };
