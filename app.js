@@ -1,11 +1,12 @@
+
 require("dotenv").config();
 const express = require("express");
 const {notFoundHandler,errorHandler} = require("./middelware/error")
 const logger = require("./middelware/logger")
 
+
 const app = express();
 app.use(logger)
-
 
 const { Sequelize } = require('sequelize');
 const initModels = require('./models/init-models');
@@ -37,6 +38,24 @@ app.get('/authors', async (req, res, next) => {
   }
 });
 
+app.get('/authors/:id', async (req, res, next) => {
+  try {
+    const foundAuthor = await author.findByPk(req.params.id);
+    if (!foundAuthor) return res.status(404).json({ error: 'Author not found' });
+    res.json(foundAuthor);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/authors', async (req, res, next) => {
+  try {
+    const newAuthor = await author.create(req.body);
+    res.status(201).json(newAuthor);
+  } catch (err) {
+    next(err);
+  }
+});
 
 
 app.use(notFoundHandler)
@@ -57,4 +76,4 @@ const startServer = async () => {
   }
 };
 
-startServer();
+startServer()
