@@ -4,16 +4,23 @@ const express = require("express");
 const {notFoundHandler,errorHandler} = require("./middelware/error")
 const logger = require("./middelware/logger")
 
+const { Sequelize } = require('sequelize');
+const initModels = require('./models/init-models');
 const app = express();
+
+const authorsRoutes = require("./routes/authors.routes")
+const booksRoute = require("./routes/books.routes")
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(logger)
+app.use('/authors', authorsRoutes);
+app.use('/books', booksRoute);
 
 
-const { Sequelize } = require('sequelize');
-const initModels = require('./models/init-models');
+
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -24,116 +31,13 @@ const sequelize = new Sequelize(
   }
 );
 
+// Initialisation des modèles et injection dans app.locals
 const models = initModels(sequelize);
-const { author, book } = models;
+app.locals.models = models;
 
 
-app.get("/", (req, res) => {
-    console.log("GET /")
-    res.send("Operation Done")
-})
-
-app.get('/authors', async (req, res, next) => {
-  try {
-    const authors = await author.findAll();
-    res.json(authors);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.get('/authors/:id', async (req, res, next) => {
-  try {
-    const foundAuthor = await author.findByPk(req.params.id);
-    if (!foundAuthor) return res.status(404).json({ error: 'Author not found' });
-    res.json(foundAuthor);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.post('/authors', async (req, res, next) => {
-  try {
-    const newAuthor = await author.create(req.body);
-    res.status(201).json(newAuthor);
-  } catch (err) {
-    next(err);
-  }
-});
-
-
-app.get('/authors/:id', async (req, res, next) => {
-  try {
-    const foundAuthor = await author.findByPk(req.params.id);
-    if (!foundAuthor) return res.status(404).json({ error: 'Author not found' });
-    res.json(foundAuthor);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.put('/authors/:id', async (req, res, next) => {
-  try {
-    const [updated] = await author.update(req.body, { where: { id: req.params.id } });
-    if (!updated) return res.status(404).json({ error: 'Author not found' });
-    const updatedAuthor = await author.findByPk(req.params.id);
-    res.json(updatedAuthor);
-  } catch (err) {
-    next(err);
-  }
-});
-
-
-app.delete('/authors/:id', async (req, res, next) => {
-  try {
-    const deleted = await author.destroy({ where: { id: req.params.id } });
-    if (!deleted) return res.status(404).json({ error: 'Author not found' });
-    res.json({ message: 'Author deleted' });
-  } catch (err) {
-    next(err);
-  }
-});
-
-
-
-
-app.post('/books', async (req, res, next) => {
-  try {
-    const newBook = await book.create(req.body);
-    res.status(201).json(newBook);
-  } catch (err) {
-    next(err);
-  }
-});
-
-
-app.put('/books/:id', async (req, res, next) => {
-  try {
-    const [updated] = await book.update(req.body, { where: { id: req.params.id } });
-    if (!updated) return res.status(404).json({ error: 'Book not found' });
-    const updatedBook = await book.findByPk(req.params.id);
-    res.json(updatedBook);
-  } catch (err) {
-    next(err);
-  }
-});
-
-
-app.delete('/books/:id', async (req, res, next) => {
-  try {
-    const deleted = await book.destroy({ where: { id: req.params.id } });
-    if (!deleted) return res.status(404).json({ error: 'Book not found' });
-    res.json({ message: 'Book deleted' });
-  } catch (err) {
-    next(err);
-  }
-});
-
-
-
-
-app.use(notFoundHandler)
-app.use(errorHandler)
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 
 
