@@ -60,6 +60,18 @@ app.post('/authors', async (req, res, next) => {
     next(err);
   }
 });
+
+
+app.get('/authors/:id', async (req, res, next) => {
+  try {
+    const foundAuthor = await author.findByPk(req.params.id);
+    if (!foundAuthor) return res.status(404).json({ error: 'Author not found' });
+    res.json(foundAuthor);
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.put('/authors/:id', async (req, res, next) => {
   try {
     const [updated] = await author.update(req.body, { where: { id: req.params.id } });
@@ -70,6 +82,54 @@ app.put('/authors/:id', async (req, res, next) => {
     next(err);
   }
 });
+
+
+app.delete('/authors/:id', async (req, res, next) => {
+  try {
+    const deleted = await author.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ error: 'Author not found' });
+    res.json({ message: 'Author deleted' });
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+
+
+app.post('/books', async (req, res, next) => {
+  try {
+    const newBook = await book.create(req.body);
+    res.status(201).json(newBook);
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+app.put('/books/:id', async (req, res, next) => {
+  try {
+    const [updated] = await book.update(req.body, { where: { id: req.params.id } });
+    if (!updated) return res.status(404).json({ error: 'Book not found' });
+    const updatedBook = await book.findByPk(req.params.id);
+    res.json(updatedBook);
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+app.delete('/books/:id', async (req, res, next) => {
+  try {
+    const deleted = await book.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ error: 'Book not found' });
+    res.json({ message: 'Book deleted' });
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 
 
 app.use(notFoundHandler)
