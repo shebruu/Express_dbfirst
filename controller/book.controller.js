@@ -1,4 +1,4 @@
-const booksService = require("../service/books.services");
+const booksService = require("../service/books.service");
 const apiCallResult = require("../responses/apiCallResult");
 
 const findAll = async (req, res) => {
@@ -9,10 +9,7 @@ const findAll = async (req, res) => {
 
 const findOne = async (req, res) => {
   const foundBook = await booksService.findOneById(req.params.id);
-  if (foundBook.status === 'error') {
-    return res.status(404).json({ error: foundBook.message });
-  }
-  res.json(foundBook);
+  a
 };
 
 const create = async (req, res) => {

@@ -1,4 +1,4 @@
-const statusToHttp = require("../utils/statusToHttpCode.utils");
+const statusToHttp = require("../utils/statusToHttpCode");
 
 //Result => {ok, status, data?, error?}
 module.exports = (res, result) => {

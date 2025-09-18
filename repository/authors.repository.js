@@ -1,4 +1,4 @@
-const author = require("../app").locals.models.author;
+const { author } = require("../models");
 
 const findAll = () => {
     return author.findAll();

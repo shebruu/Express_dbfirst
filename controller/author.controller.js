@@ -1,50 +1,35 @@
-const authorsService = require("../service/authors.services");
+const authorsService = require("../service/authors.service");
 const apiCallResult = require("../responses/apiCallResult");
 
-
-exports.findAll = async (req, res, next) => {
-  try {
-    const authors = await authorsService.findAll();
-    res.json(authors);
-  } catch (err) {
-    next(err);
-  }
+const findAll = async (req, res) => {
+  const authors = await authorsService.findAll(req.query);
+  return apiCallResult(res, authors);
 };
 
-exports.findOne = async (req, res) => {
+const findOne = async (req, res) => {
   const result = await authorsService.findOneById(req.params.id);
   return apiCallResult(res, result);
 };
 
-exports.create = async (req, res, next) => {
-  try {
-    const newAuthor = await authorsService.create(req.body);
-    res.status(201).json(newAuthor);
-  } catch (err) {
-    next(err);
-  }
+const create = async (req, res) => {
+  const result = await authorsService.create(req.body);
+  return apiCallResult(res, result);
 };
 
-exports.update = async (req, res, next) => {
-  try {
-    const updated = await authorsService.update(req.params.id, req.body);
-    if (!updated) return res.status(404).json({ error: 'Author not found' });
-    res.json(updated);
-  } catch (err) {
-    next(err);
-  }
+const update = async (req, res) => {
+  const result = await authorsService.update(req.params.id, req.body);
+  return apiCallResult(res, result);
 };
 
-exports.remove = async (req, res) => {
-
-  const deleted = await authorsService.remove(req.params.id);
+const remove = async (req, res) => {
+  const result = await authorsService.remove(req.params.id);
   return apiCallResult(res, result);
 };
 
 module.exports = {
   findAll,
   findOne,
+  create,
   update,
   remove,
-  create,
 };

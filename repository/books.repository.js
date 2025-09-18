@@ -1,4 +1,4 @@
-const { book } = require("../models/init-models")();
+const { book } = require("../models");
 
 const findAll = () => {
     return book.findAll();
