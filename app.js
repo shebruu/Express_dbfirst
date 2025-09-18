@@ -1,11 +1,11 @@
 
 require("dotenv").config();
 const express = require("express");
+const { models, sequelize } = require('./models');
+
 const { notFoundHandler, errorHandler } = require("./middelware/error")
 const logger = require("./middelware/logger")
 
-const { Sequelize } = require('sequelize');
-const initModels = require('./models/init-models');
 const app = express();
 
 const authorsRoutes = require("./routes/authors.routes")
@@ -18,21 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger)
 app.use('/authors', authorsRoutes);
 app.use('/books', booksRoute);
-
-
-
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: "postgres",
-  }
-);
-
-const models = initModels(sequelize);
-app.locals.models = models;
 
 
 app.use(notFoundHandler);
