@@ -1,6 +1,6 @@
 
-const serviceCallResult = require("../responses/serviceCallResult.response");
-const authorRepository = require("../repositoriy/authors.repository");
+const serviceCallResult = require("../responses/serviceCallResult");
+const authorRepository = require("../repository/authors.repository");
 
 const findAll = async (filters = {}) => {
     const { firstname } = filters;

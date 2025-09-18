@@ -1,18 +1,15 @@
-const {
-    models: { Books },
-} = require("../models");
-
+const { book } = require("../models/init-models")();
 
 const findAll = () => {
-    return Books.findAll();
+    return book.findAll();
 };
 
 const findById = (id) => {
-    return Books.findByPk(id);
+    return book.findByPk(id);
 };
 
 const create = (data) => {
-    return Books.create(data);
+    return book.create(data);
 };
 
 update = (currentBook, book) => {

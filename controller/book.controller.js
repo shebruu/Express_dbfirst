@@ -1,5 +1,5 @@
-const booksService = require("../services/books.services");
-const apiCallResult = require("../responses/apiCallResult.response");
+const booksService = require("../service/books.services");
+const apiCallResult = require("../responses/apiCallResult");
 
 const findAll = async (req, res) => {
 

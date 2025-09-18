@@ -1,7 +1,7 @@
 
 require("dotenv").config();
 const express = require("express");
-const {notFoundHandler,errorHandler} = require("./middelware/error")
+const { notFoundHandler, errorHandler } = require("./middelware/error")
 const logger = require("./middelware/logger")
 
 const { Sequelize } = require('sequelize');
@@ -31,7 +31,6 @@ const sequelize = new Sequelize(
   }
 );
 
-// Initialisation des modèles et injection dans app.locals
 const models = initModels(sequelize);
 app.locals.models = models;
 

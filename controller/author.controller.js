@@ -1,5 +1,5 @@
-const authorsService = require("../services/authors.services");
-const apiCallResult = require("../responses/apiCallResult.response");
+const authorsService = require("../service/authors.services");
+const apiCallResult = require("../responses/apiCallResult");
 
 
 exports.findAll = async (req, res, next) => {

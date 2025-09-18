@@ -1,18 +1,15 @@
-const {
-    models: { Authors },
-} = require("../models");
-
+const author = require("../app").locals.models.author;
 
 const findAll = () => {
-    return Authors.findAll();
+    return author.findAll();
 };
 
 const findById = (id) => {
-    return Authors.findByPk(id);
+    return author.findByPk(id);
 };
 
 const create = (author) => {
-    return Authors.create(author);
+    return author.create(author);
 };
 
 update = (currentAuthor, author) => {
