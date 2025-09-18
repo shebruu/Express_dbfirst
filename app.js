@@ -4,9 +4,13 @@ const express = require("express");
 const {notFoundHandler,errorHandler} = require("./middelware/error")
 const logger = require("./middelware/logger")
 
-
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(logger)
+
 
 const { Sequelize } = require('sequelize');
 const initModels = require('./models/init-models');
@@ -52,6 +56,16 @@ app.post('/authors', async (req, res, next) => {
   try {
     const newAuthor = await author.create(req.body);
     res.status(201).json(newAuthor);
+  } catch (err) {
+    next(err);
+  }
+});
+app.put('/authors/:id', async (req, res, next) => {
+  try {
+    const [updated] = await author.update(req.body, { where: { id: req.params.id } });
+    if (!updated) return res.status(404).json({ error: 'Author not found' });
+    const updatedAuthor = await author.findByPk(req.params.id);
+    res.json(updatedAuthor);
   } catch (err) {
     next(err);
   }
