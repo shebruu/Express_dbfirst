@@ -11,14 +11,9 @@ exports.findAll = async (req, res, next) => {
   }
 };
 
-exports.findOne = async (req, res, next) => {
-  try {
-    const foundAuthor = await authorsService.findOneById(req.params.id);
-    if (!foundAuthor) return res.status(404).json({ error: 'Author not found' });
-    res.json(foundAuthor);
-  } catch (err) {
-    next(err);
-  }
+exports.findOne = async (req, res) => {
+  const result = await authorsService.findOneById(req.params.id);
+  return apiCallResult(res, result);
 };
 
 exports.create = async (req, res, next) => {

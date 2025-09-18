@@ -7,15 +7,15 @@ const authorController = require('../controller/author.controller');
 
 
 
-router.get('/', authorController.getAllAuthors);
-router.get('/:id', authorController.getAuthorById);
-router.post('/', authorController.createAuthor);
-router.put('/:id', authorController.updateAuthor);
-router.delete('/:id', authorController.deleteAuthor);
+router.get('/', authorController.findAll);
+router.get('/:id', authorController.findOne);
+router.post('/', authorController.create);
+router.put('/:id', authorController.update);
+router.delete('/:id', authorController.remove);
 
 
 
 
 
 
- module.exports = router
+module.exports = router

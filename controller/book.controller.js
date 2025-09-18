@@ -47,3 +47,10 @@ exports.deleteBook = async (req, res, next) => {
     next(err);
   }
 };
+module.exports = {
+  getAllBooks,
+  getBookById,
+  createBook,
+  updateBook,
+  deleteBook,
+};
